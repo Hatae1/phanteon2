@@ -24,6 +24,7 @@ import { RoleIcon, getRoleLabel } from './RoleIcon';
 import { getCharacterById } from '../data/characters';
 import { soundFx } from '../utils/audio';
 import { useLanguage } from '../context/LanguageContext';
+import { getLocalizedCharacter } from '../data/translations';
 
 interface CharacterDetailModalProps {
   character: MythologicalCharacter | null;
@@ -36,7 +37,7 @@ interface CharacterDetailModalProps {
 type TabType = 'lore' | 'stats' | 'relations' | 'arts';
 
 export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
-  character,
+  character: rawCharacter,
   onClose,
   onSelectRelatedCharacter,
   onOpenCompareWith,
@@ -44,6 +45,8 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
 }) => {
   const { t, language } = useLanguage();
   const isEn = language === 'en';
+
+  const character = rawCharacter ? getLocalizedCharacter(rawCharacter, isEn) : null;
 
   const [activeTab, setActiveTab] = useState<TabType>('lore');
   const [avatarError, setAvatarError] = useState(false);
@@ -69,7 +72,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
       case 'demigod': return 'Demigod';
       case 'hero': return 'Hero';
       case 'monster': return 'Mythic Monster';
-      case 'sacred-beast': return 'Sacred Beast';
+      case 'sacred_beast': return 'Sacred Beast';
       default: return character.categoryName;
     }
   };
@@ -331,17 +334,18 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                       <div className="mt-1.5 flex flex-wrap gap-1.5">
                         {character.symbols.map((sym, i) => {
                           // Check if symbol matches an item in our encyclopedia
+                          const sLower = sym.toLowerCase();
                           let matchedItemId = '';
-                          if (sym.includes('벼락')) matchedItemId = 'keraunos';
-                          else if (sym.includes('삼지창')) matchedItemId = 'trident';
-                          else if (sym.includes('아이기스')) matchedItemId = 'aegis';
-                          else if (sym.includes('날개') || sym.includes('샌들') || sym.includes('탈라리아')) matchedItemId = 'talaria';
-                          else if (sym.includes('카두케우스') || sym.includes('지팡이') || sym.includes('케리케이온')) matchedItemId = 'caduceus';
-                          else if (sym.includes('투구') || sym.includes('퀴네에')) matchedItemId = 'cap-of-invisibility';
-                          else if (sym.includes('케스토스') || sym.includes('허리띠')) matchedItemId = 'cestus';
-                          else if (sym.includes('하르페') || sym.includes('낫')) matchedItemId = 'harpe';
-                          else if (sym.includes('사자 가죽')) matchedItemId = 'nemean-lion-pelt';
-                          else if (sym.includes('태양') && sym.includes('마차')) matchedItemId = 'sun-chariot';
+                          if (sym.includes('벼락') || sLower.includes('thunderbolt') || sLower.includes('keraunos')) matchedItemId = 'keraunos';
+                          else if (sym.includes('삼지창') || sLower.includes('trident')) matchedItemId = 'trident';
+                          else if (sym.includes('아이기스') || sLower.includes('aegis')) matchedItemId = 'aegis';
+                          else if (sym.includes('날개') || sym.includes('샌들') || sym.includes('탈라리아') || sLower.includes('talaria') || sLower.includes('sandal')) matchedItemId = 'talaria';
+                          else if (sym.includes('카두케우스') || sym.includes('지팡이') || sym.includes('케리케이온') || sLower.includes('caduceus')) matchedItemId = 'caduceus';
+                          else if (sym.includes('투구') || sym.includes('퀴네에') || sLower.includes('helm') || sLower.includes('cap of invisibility')) matchedItemId = 'cap-of-invisibility';
+                          else if (sym.includes('케스토스') || sym.includes('허리띠') || sLower.includes('cestus') || sLower.includes('girdle')) matchedItemId = 'cestus';
+                          else if (sym.includes('하르페') || sym.includes('낫') || sLower.includes('harpe') || sLower.includes('sickle')) matchedItemId = 'harpe';
+                          else if (sym.includes('사자 가죽') || sLower.includes('lion pelt') || sLower.includes('nemean')) matchedItemId = 'nemean-lion-pelt';
+                          else if ((sym.includes('태양') && sym.includes('마차')) || sLower.includes('sun chariot') || sLower.includes('chariot')) matchedItemId = 'sun-chariot';
 
                           if (matchedItemId && onOpenItemDetail) {
                             return (

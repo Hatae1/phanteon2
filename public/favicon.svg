@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="50%" stop-color="#090d16" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a" />
+      <stop offset="25%" stop-color="#f59e0b" />
+      <stop offset="60%" stop-color="#d97706" />
+      <stop offset="100%" stop-color="#b45309" />
+    </linearGradient>
+    <linearGradient id="lightningGrad" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="30%" stop-color="#fde047" />
+      <stop offset="70%" stop-color="#eab308" />
+      <stop offset="100%" stop-color="#ca8a04" />
+    </linearGradient>
+    <filter id="goldGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background Medallion -->
+  <circle cx="64" cy="64" r="60" fill="url(#bgGrad)" stroke="url(#goldGrad)" stroke-width="3.5" />
+  <circle cx="64" cy="64" r="54" fill="none" stroke="#d97706" stroke-width="1" stroke-dasharray="2 3" opacity="0.6" />
+
+  <!-- Laurel Wreath Leaves (Left) -->
+  <g fill="url(#goldGrad)" opacity="0.85">
+    <path d="M 28 66 C 24 58 29 48 37 46 C 35 52 32 60 28 66 Z" />
+    <path d="M 32 46 C 30 38 37 30 45 31 C 41 36 37 42 32 46 Z" />
+    <path d="M 43 32 C 43 23 52 18 60 21 C 55 25 49 29 43 32 Z" />
+    <path d="M 29 82 C 24 74 25 64 33 63 C 33 70 31 77 29 82 Z" />
+    <path d="M 38 97 C 32 91 32 80 40 76 C 41 83 41 91 38 97 Z" />
+  </g>
+
+  <!-- Laurel Wreath Leaves (Right) -->
+  <g fill="url(#goldGrad)" opacity="0.85">
+    <path d="M 100 66 C 104 58 99 48 91 46 C 93 52 96 60 100 66 Z" />
+    <path d="M 96 46 C 98 38 91 30 83 31 C 87 36 91 42 96 46 Z" />
+    <path d="M 85 32 C 85 23 76 18 68 21 C 73 25 79 29 85 32 Z" />
+    <path d="M 99 82 C 104 74 103 64 95 63 C 95 70 97 77 99 82 Z" />
+    <path d="M 90 97 C 96 91 96 80 88 76 C 87 83 87 91 90 97 Z" />
+  </g>
+
+  <!-- Greek Temple Pediment Baseline / Platform -->
+  <path d="M 44 88 L 84 88 L 82 92 L 46 92 Z" fill="url(#goldGrad)" opacity="0.9" />
+
+  <!-- Central Zeus Lightning Bolt (Keraunos) -->
+  <polygon points="69,18 43,62 59,62 49,106 83,54 67,54" 
+           fill="url(#lightningGrad)" 
+           filter="url(#goldGlow)"
+           stroke="#fef08a" 
+           stroke-width="1.2" 
+           stroke-linejoin="round" />
+
+  <!-- Core Spark Accent -->
+  <circle cx="61" cy="58" r="3" fill="#ffffff" opacity="0.9" />
+</svg>

@@ -12,6 +12,8 @@ export interface TranslationDictionary {
   navFamilyTreeShort: string;
   navQuiz: string;
   navQuizShort: string;
+  navShare: string;
+  navShareCopied: string;
   soundOn: string;
   soundOff: string;
   languageSelect: string;
@@ -220,6 +222,8 @@ export const translations: Record<Language, TranslationDictionary> = {
     navFamilyTreeShort: '계보도',
     navQuiz: '신화 퀴즈',
     navQuizShort: '퀴즈',
+    navShare: '공유하기',
+    navShareCopied: '링크 복사 완료!',
     soundOn: '효과음 끄기',
     soundOff: '효과음 켜기',
     languageSelect: '언어 변경 (Language)',
@@ -414,6 +418,8 @@ export const translations: Record<Language, TranslationDictionary> = {
     navFamilyTreeShort: 'Genealogy',
     navQuiz: 'Mythology Quiz',
     navQuizShort: 'Quiz',
+    navShare: 'Share',
+    navShareCopied: 'Link Copied!',
     soundOn: 'Mute Sound FX',
     soundOff: 'Enable Sound FX',
     languageSelect: 'Select Language',
@@ -697,3 +703,6 @@ export const QUIZ_QUESTIONS_EN = LOCALIZED_QUIZ_QUESTIONS.map(q => ({
   correctIndex: q.correctIndex,
   explanation: q.explanation.en,
 }));
+
+export * from './translations/index';
+

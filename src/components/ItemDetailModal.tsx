@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { MythologicalItem, MythologicalCharacter } from '../types';
 import { soundFx } from '../utils/audio';
 import { useLanguage } from '../context/LanguageContext';
+import { getLocalizedItem } from '../data/translations';
 import {
   X,
   Star,
@@ -28,19 +29,48 @@ interface ItemDetailModalProps {
   item: MythologicalItem | null;
   onClose: () => void;
   onSelectCharacter?: (characterId: string) => void;
+  isZoomOpen?: boolean;
+  onOpenZoom?: () => void;
+  onCloseZoom?: () => void;
 }
 
 export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
-  item,
+  item: rawItem,
   onClose,
   onSelectCharacter,
+  isZoomOpen: controlledZoomOpen,
+  onOpenZoom,
+  onCloseZoom,
 }) => {
   const { t, language } = useLanguage();
   const isEn = language === 'en';
 
+  const item = rawItem ? getLocalizedItem(rawItem, isEn) : null;
+
   const [activeTab, setActiveTab] = useState<'lore' | 'stats' | 'artwork' | 'stories' | 'legacy'>('lore');
-  const [isZoomOpen, setIsZoomOpen] = useState<boolean>(false);
+  const [internalZoomOpen, setInternalZoomOpen] = useState<boolean>(false);
   const [zoomScale, setZoomScale] = useState<number>(1);
+
+  const isZoomOpen = controlledZoomOpen !== undefined ? controlledZoomOpen : internalZoomOpen;
+
+  const handleOpenZoom = () => {
+    soundFx.playClick();
+    if (onOpenZoom) {
+      onOpenZoom();
+    } else {
+      setInternalZoomOpen(true);
+    }
+  };
+
+  const handleCloseZoom = () => {
+    soundFx.playClick();
+    setZoomScale(1);
+    if (onCloseZoom) {
+      onCloseZoom();
+    } else {
+      setInternalZoomOpen(false);
+    }
+  };
 
   if (!item) return null;
 
@@ -99,10 +129,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
 
             {/* Clear Center Artwork */}
             <div
-              onClick={() => {
-                soundFx.playClick();
-                setIsZoomOpen(true);
-              }}
+              onClick={handleOpenZoom}
               className="absolute inset-0 flex items-center justify-center cursor-pointer transition-transform duration-500 group-hover:scale-102"
               title={isEn ? 'Click to enlarge high-res illustration' : '클릭하여 원본 일러스트 크게 확대 보기'}
             >
@@ -121,10 +148,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
             <div className="absolute top-4 right-4 z-20 flex items-center gap-2">
               <button
                 id="btn-zoom-item-artwork"
-                onClick={() => {
-                  soundFx.playClick();
-                  setIsZoomOpen(true);
-                }}
+                onClick={handleOpenZoom}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-950/80 border border-amber-500/50 text-amber-300 hover:text-white hover:bg-amber-600/80 hover:border-amber-400 transition cursor-pointer text-xs font-bold shadow-lg backdrop-blur-md"
               >
                 <Maximize2 size={14} />
@@ -276,10 +300,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
                       </p>
                     </div>
                     <button
-                      onClick={() => {
-                        soundFx.playClick();
-                        setIsZoomOpen(true);
-                      }}
+                      onClick={handleOpenZoom}
                       className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition cursor-pointer shadow-lg"
                     >
                       <Maximize2 size={15} />
@@ -289,10 +310,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
 
                   {/* Large High-Res Display Frame */}
                   <div
-                    onClick={() => {
-                      soundFx.playClick();
-                      setIsZoomOpen(true);
-                    }}
+                    onClick={handleOpenZoom}
                     className="relative w-full rounded-2xl overflow-hidden bg-slate-950 border border-amber-500/30 flex items-center justify-center p-3 sm:p-6 cursor-pointer group shadow-inner min-h-[320px] sm:min-h-[420px]"
                   >
                     <img
@@ -337,10 +355,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
               <div className="space-y-6">
                 {/* Visual Preview Banner inside Lore */}
                 <div
-                  onClick={() => {
-                    soundFx.playClick();
-                    setIsZoomOpen(true);
-                  }}
+                  onClick={handleOpenZoom}
                   className="rounded-2xl border border-amber-500/30 bg-gradient-to-r from-amber-500/10 via-slate-900/80 to-slate-900/90 p-4 flex flex-col sm:flex-row items-center gap-4 cursor-pointer hover:border-amber-400 transition group shadow-lg"
                 >
                   <div className="relative h-28 w-28 sm:h-32 sm:w-32 shrink-0 rounded-xl overflow-hidden bg-slate-950 border border-amber-500/40 p-1 flex items-center justify-center shadow-md">
@@ -534,11 +549,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => {
-              soundFx.playClick();
-              setIsZoomOpen(false);
-              setZoomScale(1);
-            }}
+            onClick={handleCloseZoom}
             className="fixed inset-0 bg-black/95 backdrop-blur-xl"
           />
 
@@ -587,11 +598,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
                   <ZoomIn size={18} />
                 </button>
                 <button
-                  onClick={() => {
-                    soundFx.playClick();
-                    setIsZoomOpen(false);
-                    setZoomScale(1);
-                  }}
+                  onClick={handleCloseZoom}
                   className="p-2 rounded-lg bg-red-950/60 border border-red-500/50 text-red-300 hover:text-white hover:bg-red-900 transition cursor-pointer ml-2"
                   title={isEn ? 'Close' : '닫기'}
                 >

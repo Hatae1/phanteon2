@@ -5,6 +5,7 @@ import { MythologicalCharacter } from '../types';
 import { allCharacters } from '../data/characters';
 import { soundFx } from '../utils/audio';
 import { useLanguage } from '../context/LanguageContext';
+import { getLocalizedCharacter } from '../data/translations';
 
 interface StatComparisonModalProps {
   isOpen: boolean;
@@ -20,6 +21,7 @@ export const StatComparisonModal: React.FC<StatComparisonModalProps> = ({
   initialCharacterB,
 }) => {
   const { language, getCharName, t } = useLanguage();
+  const isEn = language === 'en';
   const [charAId, setCharAId] = useState<string>(initialCharacterA?.id || allCharacters[0].id);
   const [charBId, setCharBId] = useState<string>(
     initialCharacterB?.id || allCharacters[1].id
@@ -29,8 +31,10 @@ export const StatComparisonModal: React.FC<StatComparisonModalProps> = ({
 
   if (!isOpen) return null;
 
-  const charA = allCharacters.find(c => c.id === charAId) || allCharacters[0];
-  const charB = allCharacters.find(c => c.id === charBId) || allCharacters[1];
+  const rawCharA = allCharacters.find(c => c.id === charAId) || allCharacters[0];
+  const rawCharB = allCharacters.find(c => c.id === charBId) || allCharacters[1];
+  const charA = getLocalizedCharacter(rawCharA, isEn);
+  const charB = getLocalizedCharacter(rawCharB, isEn);
 
   const nameA = getCharName(charA);
   const nameB = getCharName(charB);

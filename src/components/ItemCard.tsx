@@ -3,14 +3,17 @@ import { MythologicalItem } from '../types';
 import { soundFx } from '../utils/audio';
 import { Star, User, Hammer } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import { getLocalizedItem } from '../data/translations';
 
 interface ItemCardProps {
   item: MythologicalItem;
   onClick: () => void;
 }
 
-export const ItemCard: React.FC<ItemCardProps> = ({ item, onClick }) => {
+export const ItemCard: React.FC<ItemCardProps> = ({ item: rawItem, onClick }) => {
   const { language, getItemName, t } = useLanguage();
+  const isEn = language === 'en';
+  const item = getLocalizedItem(rawItem, isEn);
 
   const getCategoryBadgeColor = (cat: string) => {
     switch (cat) {

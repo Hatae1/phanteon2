@@ -1,0 +1,71 @@
+{
+  "name": "그리스 로마 신화 판테온 & 성물 도감",
+  "short_name": "신화 도감",
+  "description": "올림포스 12주신, 영웅, 괴물 및 전설 속 신성 무기·성물 대백과 도감",
+  "start_url": "/",
+  "id": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#020617",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "올림포스 주신 도감",
+      "short_name": "주신 도감",
+      "description": "올림포스 12주신 및 명계의 신 인물 상세 열람",
+      "url": "/?tab=characters&category=olympian",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "신성 보구 도감",
+      "short_name": "성물 도감",
+      "description": "케라우노스, 아이기스 등 34종 전설의 성물 도감",
+      "url": "/?tab=items",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "신화 상식 퀴즈",
+      "short_name": "신화 퀴즈",
+      "description": "3단계 난이도별 신화 상식 퀴즈 챌린지",
+      "url": "/?action=quiz",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "올림포스 가계도",
+      "short_name": "신화 계보",
+      "description": "올림포스 4대 가계도 및 인터랙티브 관계망 탐색",
+      "url": "/?action=familytree",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

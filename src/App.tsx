@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { Navbar } from './components/Navbar';
 import { FilterBar } from './components/FilterBar';
 import { HeroGrid } from './components/HeroGrid';
@@ -14,6 +14,7 @@ import { Footer } from './components/Footer';
 import { PolicyModal, PolicyTab } from './components/PolicyModal';
 import { allCharacters, filterCharacters } from './data/characters';
 import { allMythologicalItems, filterItems } from './data/mythologicalItems';
+import { AppModalEntry } from './types/modal';
 import {
   MythologicalCharacter,
   CharacterCategory,
@@ -33,27 +34,84 @@ export default function App() {
   // Main View Tab: Characters vs Items
   const [mainViewTab, setMainViewTab] = useState<'characters' | 'items'>('characters');
 
-  // Character States
-  const [selectedCharacter, setSelectedCharacter] = useState<MythologicalCharacter | null>(null);
+  // Character Filter States
   const [category, setCategory] = useState<CharacterCategory>('all');
   const [role, setRole] = useState<CharacterRole | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<SortOption>('default');
 
-  // Item States
-  const [selectedItem, setSelectedItem] = useState<MythologicalItem | null>(null);
+  // Item Filter States
   const [itemCategory, setItemCategory] = useState<ItemCategory>('all');
   const [itemSearchQuery, setItemSearchQuery] = useState('');
   const [itemSortBy, setItemSortBy] = useState<ItemSortOption>('default');
 
-  // Modals
-  const [isCompareOpen, setIsCompareOpen] = useState(false);
-  const [compareFighterA, setCompareFighterA] = useState<MythologicalCharacter | undefined>(undefined);
-  const [compareFighterB, setCompareFighterB] = useState<MythologicalCharacter | undefined>(undefined);
-  const [isFamilyTreeOpen, setIsFamilyTreeOpen] = useState(false);
-  const [isQuizOpen, setIsQuizOpen] = useState(false);
-  const [isPolicyOpen, setIsPolicyOpen] = useState(false);
-  const [policyTab, setPolicyTab] = useState<PolicyTab>('privacy');
+  // Unified Modal History & Navigation Stack
+  const [modalStack, setModalStack] = useState<AppModalEntry[]>([]);
+  const modalStackRef = useRef<AppModalEntry[]>([]);
+  modalStackRef.current = modalStack;
+  const ignorePopstateRef = useRef<number>(0);
+
+  // Active character modal in stack
+  const selectedCharacter = useMemo(() => {
+    for (let i = modalStack.length - 1; i >= 0; i--) {
+      if (modalStack[i].type === 'character') {
+        return (modalStack[i] as { type: 'character'; character: MythologicalCharacter }).character;
+      }
+    }
+    return null;
+  }, [modalStack]);
+
+  // Active item modal in stack
+  const selectedItem = useMemo(() => {
+    for (let i = modalStack.length - 1; i >= 0; i--) {
+      if (modalStack[i].type === 'item') {
+        return (modalStack[i] as { type: 'item'; item: MythologicalItem }).item;
+      }
+    }
+    return null;
+  }, [modalStack]);
+
+  // Is item high-res zoom lightbox currently open on top of the item modal
+  const isItemZoomOpen = useMemo(() => {
+    const top = modalStack[modalStack.length - 1];
+    return top?.type === 'itemZoom';
+  }, [modalStack]);
+
+  // Active compare modal in stack
+  const compareEntry = useMemo(() => {
+    for (let i = modalStack.length - 1; i >= 0; i--) {
+      if (modalStack[i].type === 'compare') {
+        return modalStack[i] as { type: 'compare'; fighterA?: MythologicalCharacter; fighterB?: MythologicalCharacter };
+      }
+    }
+    return null;
+  }, [modalStack]);
+  const isCompareOpen = Boolean(compareEntry);
+  const compareFighterA = compareEntry?.fighterA;
+  const compareFighterB = compareEntry?.fighterB;
+
+  // Family tree modal in stack
+  const isFamilyTreeOpen = useMemo(() => {
+    return modalStack.some(m => m.type === 'familyTree');
+  }, [modalStack]);
+
+  // Quiz modal in stack
+  const isQuizOpen = useMemo(() => {
+    return modalStack.some(m => m.type === 'quiz');
+  }, [modalStack]);
+
+  // Policy modal in stack
+  const policyEntry = useMemo(() => {
+    for (let i = modalStack.length - 1; i >= 0; i--) {
+      if (modalStack[i].type === 'policy') {
+        return modalStack[i] as { type: 'policy'; tab: PolicyTab };
+      }
+    }
+    return null;
+  }, [modalStack]);
+  const isPolicyOpen = Boolean(policyEntry);
+  const policyTab = policyEntry?.tab ?? 'privacy';
+
   const [soundEnabled, setSoundEnabled] = useState(true);
 
   // Sound toggle
@@ -65,6 +123,128 @@ export default function App() {
       soundFx.playClick();
     }
   };
+
+  // Modal Opener Functions with Browser History Push
+  const openCharacter = (character: MythologicalCharacter) => {
+    soundFx.playClick();
+    window.history.pushState({ modal: 'character', id: character.id }, '');
+    setModalStack(prev => [...prev, { type: 'character', character }]);
+  };
+
+  const openItem = (item: MythologicalItem) => {
+    soundFx.playClick();
+    window.history.pushState({ modal: 'item', id: item.id }, '');
+    setModalStack(prev => [...prev, { type: 'item', item }]);
+  };
+
+  const openItemZoom = (item: MythologicalItem) => {
+    soundFx.playClick();
+    window.history.pushState({ modal: 'itemZoom', id: item.id }, '');
+    setModalStack(prev => [...prev, { type: 'itemZoom', item }]);
+  };
+
+  const openCompare = (fighterA?: MythologicalCharacter, fighterB?: MythologicalCharacter) => {
+    soundFx.playClick();
+    window.history.pushState({ modal: 'compare' }, '');
+    setModalStack(prev => [...prev, { type: 'compare', fighterA, fighterB }]);
+  };
+
+  const openFamilyTree = () => {
+    soundFx.playClick();
+    window.history.pushState({ modal: 'familyTree' }, '');
+    setModalStack(prev => [...prev, { type: 'familyTree' }]);
+  };
+
+  const openQuiz = () => {
+    soundFx.playClick();
+    window.history.pushState({ modal: 'quiz' }, '');
+    setModalStack(prev => [...prev, { type: 'quiz' }]);
+  };
+
+  const openPolicy = (tab: PolicyTab) => {
+    soundFx.playClick();
+    window.history.pushState({ modal: 'policy', tab }, '');
+    setModalStack(prev => [...prev, { type: 'policy', tab }]);
+  };
+
+  // Close the active top-most modal
+  const closeTopModal = (isFromBrowserBack = false) => {
+    if (modalStackRef.current.length === 0) return;
+
+    if (!isFromBrowserBack) {
+      ignorePopstateRef.current += 1;
+      window.history.back();
+    }
+    setModalStack(prev => prev.slice(0, -1));
+  };
+
+  // Browser Back Button & Escape Key Handling
+  useEffect(() => {
+    const handlePopstate = () => {
+      if (ignorePopstateRef.current > 0) {
+        ignorePopstateRef.current -= 1;
+        return;
+      }
+
+      if (modalStackRef.current.length > 0) {
+        // Closed via browser/mobile back button - do not call history.back()
+        closeTopModal(true);
+      }
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && modalStackRef.current.length > 0) {
+        closeTopModal(false);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopstate);
+    window.addEventListener('keydown', handleKeyDown);
+
+    // Support PWA app shortcuts & direct URL query routes on startup
+    try {
+      const searchParams = new URLSearchParams(window.location.search);
+      const tabParam = searchParams.get('tab');
+      if (tabParam === 'items') {
+        setMainViewTab('items');
+      } else if (tabParam === 'characters') {
+        setMainViewTab('characters');
+      }
+
+      const catParam = searchParams.get('category');
+      if (catParam) {
+        setCategory(catParam as CharacterCategory);
+      }
+
+      const actionParam = searchParams.get('action');
+      if (actionParam === 'quiz') {
+        openQuiz();
+      } else if (actionParam === 'familytree' || actionParam === 'familyTree') {
+        openFamilyTree();
+      } else if (actionParam === 'compare') {
+        openCompare();
+      }
+    } catch {
+      // Ignore if URL query parsing fails
+    }
+
+    return () => {
+      window.removeEventListener('popstate', handlePopstate);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
+  // Lock background body scroll when any modal is open
+  useEffect(() => {
+    if (modalStack.length > 0) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [modalStack.length]);
 
   // Filtered & Sorted Characters
   const displayedCharacters = useMemo(() => {
@@ -115,20 +295,15 @@ export default function App() {
 
   // Open Compare from Detail
   const handleOpenCompareWith = (character: MythologicalCharacter) => {
-    setCompareFighterA(character);
-    // pick second character that is not the same
     const other = allCharacters.find(c => c.id !== character.id);
-    setCompareFighterB(other);
-    setSelectedCharacter(null);
-    setIsCompareOpen(true);
+    openCompare(character, other);
   };
 
   // Select Character by ID (e.g. from Item detail owner/creator link)
   const handleSelectCharacterById = (characterId: string) => {
     const found = allCharacters.find(c => c.id === characterId);
     if (found) {
-      setSelectedCharacter(found);
-      setSelectedItem(null);
+      openCharacter(found);
     }
   };
 
@@ -136,8 +311,7 @@ export default function App() {
   const handleOpenItemById = (itemId: string) => {
     const found = allMythologicalItems.find(i => i.id === itemId);
     if (found) {
-      setSelectedItem(found);
-      setSelectedCharacter(null);
+      openItem(found);
     }
   };
 
@@ -164,13 +338,9 @@ export default function App() {
       <div className="relative z-10 flex min-h-screen flex-col">
         {/* Navigation Bar */}
         <Navbar
-          onOpenCompare={() => {
-            setCompareFighterA(undefined);
-            setCompareFighterB(undefined);
-            setIsCompareOpen(true);
-          }}
-          onOpenFamilyTree={() => setIsFamilyTreeOpen(true)}
-          onOpenQuiz={() => setIsQuizOpen(true)}
+          onOpenCompare={() => openCompare()}
+          onOpenFamilyTree={() => openFamilyTree()}
+          onOpenQuiz={() => openQuiz()}
           soundEnabled={soundEnabled}
           onToggleSound={handleToggleSound}
         />
@@ -198,14 +368,14 @@ export default function App() {
               {/* Quick Feature Badges */}
               <div className="flex items-center gap-2 flex-wrap md:flex-nowrap">
                 <button
-                  onClick={() => setIsCompareOpen(true)}
+                  onClick={() => openCompare()}
                   className="flex items-center gap-1.5 rounded-xl border border-amber-500/40 bg-slate-950/80 px-3.5 py-2 text-xs font-semibold text-amber-200 hover:bg-amber-500/20 transition cursor-pointer shadow"
                 >
                   <Swords size={14} className="text-amber-400" />
                   <span>{t.btnClash}</span>
                 </button>
                 <button
-                  onClick={() => setIsQuizOpen(true)}
+                  onClick={() => openQuiz()}
                   className="flex items-center gap-1.5 rounded-xl border border-purple-500/40 bg-slate-950/80 px-3.5 py-2 text-xs font-semibold text-purple-200 hover:bg-purple-500/20 transition cursor-pointer shadow"
                 >
                   <BookOpen size={14} className="text-purple-400" />
@@ -269,7 +439,7 @@ export default function App() {
               {/* 5-Column Character Roster */}
               <HeroGrid
                 characters={displayedCharacters}
-                onSelectCharacter={char => setSelectedCharacter(char)}
+                onSelectCharacter={char => openCharacter(char)}
                 onResetFilters={() => {
                   setCategory('all');
                   setRole('all');
@@ -297,7 +467,7 @@ export default function App() {
               {/* Item Card Grid */}
               <ItemGrid
                 items={displayedItems}
-                onSelectItem={item => setSelectedItem(item)}
+                onSelectItem={item => openItem(item)}
                 onResetFilters={() => {
                   setItemCategory('all');
                   setItemSearchQuery('');
@@ -313,14 +483,11 @@ export default function App() {
 
         {/* AdSense Compliant Multi-Column Footer */}
         <Footer
-          onOpenPolicy={(tab) => {
-            setPolicyTab(tab);
-            setIsPolicyOpen(true);
-          }}
+          onOpenPolicy={(tab) => openPolicy(tab)}
           onSelectMainTab={(tab) => setMainViewTab(tab)}
-          onOpenCompare={() => setIsCompareOpen(true)}
-          onOpenFamilyTree={() => setIsFamilyTreeOpen(true)}
-          onOpenQuiz={() => setIsQuizOpen(true)}
+          onOpenCompare={() => openCompare()}
+          onOpenFamilyTree={() => openFamilyTree()}
+          onOpenQuiz={() => openQuiz()}
         />
       </div>
 
@@ -328,14 +495,14 @@ export default function App() {
       <PolicyModal
         isOpen={isPolicyOpen}
         initialTab={policyTab}
-        onClose={() => setIsPolicyOpen(false)}
+        onClose={() => closeTopModal(false)}
       />
 
       {/* Character Detail Modal (신화적 배경 이야기 상세 페이지) */}
       <CharacterDetailModal
         character={selectedCharacter}
-        onClose={() => setSelectedCharacter(null)}
-        onSelectRelatedCharacter={char => setSelectedCharacter(char)}
+        onClose={() => closeTopModal(false)}
+        onSelectRelatedCharacter={char => openCharacter(char)}
         onOpenCompareWith={handleOpenCompareWith}
         onOpenItemDetail={handleOpenItemById}
       />
@@ -343,14 +510,19 @@ export default function App() {
       {/* Item Detail Modal (신화 성물 & 아이템 상세 페이지) */}
       <ItemDetailModal
         item={selectedItem}
-        onClose={() => setSelectedItem(null)}
+        isZoomOpen={isItemZoomOpen}
+        onOpenZoom={() => {
+          if (selectedItem) openItemZoom(selectedItem);
+        }}
+        onCloseZoom={() => closeTopModal(false)}
+        onClose={() => closeTopModal(false)}
         onSelectCharacter={handleSelectCharacterById}
       />
 
       {/* Stat Comparison Modal (신들의 대결 & 능력치 비교) */}
       <StatComparisonModal
         isOpen={isCompareOpen}
-        onClose={() => setIsCompareOpen(false)}
+        onClose={() => closeTopModal(false)}
         initialCharacterA={compareFighterA}
         initialCharacterB={compareFighterB}
       />
@@ -358,14 +530,14 @@ export default function App() {
       {/* Family Tree Modal (신화 계보도) */}
       <FamilyTreeModal
         isOpen={isFamilyTreeOpen}
-        onClose={() => setIsFamilyTreeOpen(false)}
-        onSelectCharacter={char => setSelectedCharacter(char)}
+        onClose={() => closeTopModal(false)}
+        onSelectCharacter={char => openCharacter(char)}
       />
 
       {/* Mythology Quiz Modal (신화 퀴즈) */}
       <MythologyQuizModal
         isOpen={isQuizOpen}
-        onClose={() => setIsQuizOpen(false)}
+        onClose={() => closeTopModal(false)}
       />
     </div>
   );
