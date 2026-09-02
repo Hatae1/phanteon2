@@ -1,0 +1,6 @@
+{
+  "name": "그리스 로마 신화 판테온 & 성물 도감",
+  "description": "그리스 로마 신화의 주신·영웅·괴물 캐릭터 도감 및 전설 속 무기·신발·장신구·갑옷·성물 대백과 도감",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
