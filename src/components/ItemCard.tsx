@@ -43,8 +43,8 @@ export const ItemCard: React.FC<ItemCardProps> = ({ item: rawItem, onClick }) =>
     }
   };
 
-  const displayName = getItemName(item);
-  const subName = language === 'en' ? item.nameKo : item.nameEn;
+  const displayName = isEn ? item.nameEn : item.nameKo;
+  const subName = isEn ? item.nameGreek : item.nameEn;
 
   return (
     <div
@@ -104,7 +104,7 @@ export const ItemCard: React.FC<ItemCardProps> = ({ item: rawItem, onClick }) =>
           <h3 className="text-base font-extrabold text-white group-hover:text-amber-300 transition-colors line-clamp-1">
             {displayName}
           </h3>
-          <p className="text-xs text-slate-400 font-medium truncate mt-0.5">
+          <p className={`text-xs truncate mt-0.5 ${isEn ? 'text-amber-300/85 font-serif italic' : 'text-slate-400 font-medium'}`}>
             {subName}
           </p>
         </div>

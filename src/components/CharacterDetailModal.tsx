@@ -25,6 +25,12 @@ import { getCharacterById } from '../data/characters';
 import { soundFx } from '../utils/audio';
 import { useLanguage } from '../context/LanguageContext';
 import { getLocalizedCharacter } from '../data/translations';
+import {
+  getLocalizedRelation,
+  getLocalizedEntityName,
+  getLocalizedDisguise,
+  getLocalizedAffairDetail,
+} from '../data/translations/relationshipTranslations';
 
 interface CharacterDetailModalProps {
   character: MythologicalCharacter | null;
@@ -196,14 +202,14 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                       {isEn ? character.nameEn : character.nameKo}
                     </h2>
                     <span className="font-serif text-sm sm:text-base md:text-lg text-amber-300/90 font-medium">
-                      {character.nameGreek} ({isEn ? character.nameKo : character.nameEn})
+                      {character.nameGreek} {!isEn && `(${character.nameEn})`}
                     </span>
                   </div>
 
                   <div className="mt-1 flex items-center justify-center sm:justify-start gap-2 text-xs sm:text-sm text-slate-300">
                     <span className="text-slate-400">{isEn ? 'Roman Name:' : '로마명:'}</span>
                     <strong className="text-amber-200 font-serif tracking-wide">
-                      {isEn ? character.romanNameEn : character.romanNameKo} ({isEn ? character.romanNameKo : character.romanNameEn})
+                      {isEn ? character.romanNameEn : `${character.romanNameKo} (${character.romanNameEn})`}
                     </strong>
                   </div>
 
@@ -639,6 +645,8 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                       <div className="flex flex-col gap-2.5">
                         {character.relationships.parents.map((p, i) => {
                           const targetChar = p.id ? getCharacterById(p.id) : null;
+                          const displayName = isEn ? (targetChar ? targetChar.nameEn : getLocalizedEntityName(p.name, true)) : p.name;
+                          const displayRelation = getLocalizedRelation(p.relation, isEn);
                           return (
                             <div
                               key={i}
@@ -658,9 +666,9 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                                       : 'text-slate-100 cursor-default'
                                   }`}
                                 >
-                                  {isEn && targetChar ? targetChar.nameEn : p.name}
+                                  {displayName}
                                 </button>
-                                <span className="text-xs text-slate-300 font-medium">({p.relation})</span>
+                                <span className="text-xs text-slate-300 font-medium">({displayRelation})</span>
                                 {p.isAffair && (
                                   <span className="text-[11px] bg-purple-500/25 text-purple-200 px-2 py-0.5 rounded border border-purple-500/40 font-semibold">
                                     {isEn ? 'Affair/Secret Union' : '외도/불륜 탄생'}
@@ -691,6 +699,8 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                       <div className="flex flex-col gap-2.5">
                         {character.relationships.spouse.map((s, i) => {
                           const targetChar = s.id ? getCharacterById(s.id) : null;
+                          const displayName = isEn ? (targetChar ? targetChar.nameEn : getLocalizedEntityName(s.name, true)) : s.name;
+                          const displayRelation = getLocalizedRelation(s.relation, isEn);
                           return (
                             <div
                               key={i}
@@ -706,9 +716,9 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                                       : 'text-slate-100 cursor-default'
                                   }`}
                                 >
-                                  {isEn && targetChar ? targetChar.nameEn : s.name}
+                                  {displayName}
                                 </button>
-                                <span className="text-xs text-pink-200/80 font-medium">({s.relation})</span>
+                                <span className="text-xs text-pink-200/80 font-medium">({displayRelation})</span>
                                 {s.isLegitimate && (
                                   <span className="text-[11px] bg-emerald-500/25 text-emerald-300 px-2 py-0.5 rounded border border-emerald-500/40 font-semibold">
                                     {isEn ? 'Legitimate' : '정실 (정식 혼인)'}
@@ -745,6 +755,10 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {character.relationships.lovers.map((l, i) => {
                           const targetChar = l.id ? getCharacterById(l.id) : null;
+                          const displayName = isEn ? (targetChar ? targetChar.nameEn : getLocalizedEntityName(l.name, true)) : l.name;
+                          const displayRelation = getLocalizedRelation(l.relation, isEn);
+                          const displayDisguise = l.disguiseOrMethod ? getLocalizedDisguise(l.disguiseOrMethod, isEn) : null;
+                          const displayDetail = l.affairDetail ? getLocalizedAffairDetail(l.affairDetail, isEn) : null;
                           return (
                             <div
                               key={i}
@@ -761,9 +775,9 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                                         : 'text-slate-100 cursor-default'
                                     }`}
                                   >
-                                    {isEn && targetChar ? targetChar.nameEn : l.name}
+                                    {displayName}
                                   </button>
-                                  <span className="text-xs text-purple-300/90 font-medium">({l.relation})</span>
+                                  <span className="text-xs text-purple-300/90 font-medium">({displayRelation})</span>
                                 </div>
                                 {targetChar && (
                                   <button
@@ -775,16 +789,16 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                                 )}
                               </div>
 
-                              {l.disguiseOrMethod && (
+                              {displayDisguise && (
                                 <div className="flex items-center gap-1.5 text-xs text-amber-200 bg-amber-950/40 px-2.5 py-1 rounded border border-amber-500/30 font-medium">
                                   <span className="text-xs font-bold text-amber-400">{isEn ? 'Disguise:' : '변신술:'}</span>
-                                  <span>{l.disguiseOrMethod}</span>
+                                  <span>{displayDisguise}</span>
                                 </div>
                               )}
 
-                              {l.affairDetail && (
+                              {displayDetail && (
                                 <p className="text-xs sm:text-sm text-slate-200 leading-relaxed pt-0.5">
-                                  {l.affairDetail}
+                                  {displayDetail}
                                 </p>
                               )}
                             </div>
@@ -809,6 +823,9 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {character.relationships.illegitimateChildren.map((c, i) => {
                           const targetChar = c.id ? getCharacterById(c.id) : null;
+                          const displayName = isEn ? (targetChar ? targetChar.nameEn : getLocalizedEntityName(c.name, true)) : c.name;
+                          const displayRelation = getLocalizedRelation(c.relation, isEn);
+                          const displayDetail = c.affairDetail ? getLocalizedAffairDetail(c.affairDetail, isEn) : null;
                           return (
                             <div
                               key={i}
@@ -825,9 +842,9 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                                         : 'text-slate-100 cursor-default'
                                     }`}
                                   >
-                                    {isEn && targetChar ? targetChar.nameEn : c.name}
+                                    {displayName}
                                   </button>
-                                  <span className="text-xs text-amber-300/90 font-medium">({c.relation})</span>
+                                  <span className="text-xs text-amber-300/90 font-medium">({displayRelation})</span>
                                 </div>
                                 {targetChar && (
                                   <button
@@ -839,9 +856,9 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                                 )}
                               </div>
 
-                              {c.affairDetail && (
+                              {displayDetail && (
                                 <p className="text-xs sm:text-sm text-slate-200 leading-relaxed pt-0.5">
-                                  {c.affairDetail}
+                                  {displayDetail}
                                 </p>
                               )}
                             </div>
@@ -860,6 +877,8 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                       <div className="flex flex-wrap gap-2">
                         {character.relationships.children.map((c, i) => {
                           const targetChar = c.id ? getCharacterById(c.id) : null;
+                          const displayName = isEn ? (targetChar ? targetChar.nameEn : getLocalizedEntityName(c.name, true)) : c.name;
+                          const displayRelation = getLocalizedRelation(c.relation, isEn);
                           return (
                             <button
                               key={i}
@@ -871,7 +890,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                                   : 'bg-slate-800 text-slate-200 border border-slate-700 cursor-default'
                               }`}
                             >
-                              <span>{isEn && targetChar ? targetChar.nameEn : c.name}</span>
+                              <span>{displayName}</span>
                               {c.isIllegitimate ? (
                                 <span className="text-[11px] bg-amber-500/25 text-amber-300 px-1.5 py-0.5 rounded border border-amber-500/40 font-bold">
                                   {isEn ? 'Illegitimate' : '서자'}
@@ -881,7 +900,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                                   {isEn ? 'Legitimate' : '정실'}
                                 </span>
                               ) : null}
-                              <span className="text-xs text-slate-300 font-normal">({c.relation})</span>
+                              <span className="text-xs text-slate-300 font-normal">({displayRelation})</span>
                               {targetChar && <ChevronRight size={14} className="text-cyan-400" />}
                             </button>
                           );
@@ -899,6 +918,8 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                       <div className="flex flex-wrap gap-2">
                         {character.relationships.siblings.map((sb, i) => {
                           const targetChar = sb.id ? getCharacterById(sb.id) : null;
+                          const displayName = isEn ? (targetChar ? targetChar.nameEn : getLocalizedEntityName(sb.name, true)) : sb.name;
+                          const displayRelation = getLocalizedRelation(sb.relation, isEn);
                           return (
                             <button
                               key={i}
@@ -910,8 +931,8 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                                   : 'bg-slate-800 text-slate-300 border border-slate-700 cursor-default'
                               }`}
                             >
-                              <span>{isEn && targetChar ? targetChar.nameEn : sb.name}</span>
-                              <span className="text-xs text-slate-300 font-normal">({sb.relation})</span>
+                              <span>{displayName}</span>
+                              <span className="text-xs text-slate-300 font-normal">({displayRelation})</span>
                               {targetChar && <ChevronRight size={14} className="text-indigo-400" />}
                             </button>
                           );
@@ -929,6 +950,8 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                       <div className="flex flex-wrap gap-2">
                         {character.relationships.allies.map((al, i) => {
                           const targetChar = al.id ? getCharacterById(al.id) : null;
+                          const displayName = isEn ? (targetChar ? targetChar.nameEn : getLocalizedEntityName(al.name, true)) : al.name;
+                          const displayRelation = getLocalizedRelation(al.relation, isEn);
                           return (
                             <button
                               key={i}
@@ -940,8 +963,8 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                                   : 'bg-slate-800 text-slate-300 border border-slate-700 cursor-default'
                               }`}
                             >
-                              <span>{isEn && targetChar ? targetChar.nameEn : al.name}</span>
-                              <span className="text-xs text-slate-300 font-normal">({al.relation})</span>
+                              <span>{displayName}</span>
+                              <span className="text-xs text-slate-300 font-normal">({displayRelation})</span>
                               {targetChar && <ChevronRight size={14} className="text-emerald-400" />}
                             </button>
                           );
@@ -959,6 +982,8 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                       <div className="flex flex-wrap gap-2">
                         {character.relationships.rivals.map((rv, i) => {
                           const targetChar = rv.id ? getCharacterById(rv.id) : null;
+                          const displayName = isEn ? (targetChar ? targetChar.nameEn : getLocalizedEntityName(rv.name, true)) : rv.name;
+                          const displayRelation = getLocalizedRelation(rv.relation, isEn);
                           return (
                             <button
                               key={i}
@@ -970,8 +995,8 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                                   : 'bg-slate-800 text-slate-300 border border-slate-700 cursor-default'
                               }`}
                             >
-                              <span>{isEn && targetChar ? targetChar.nameEn : rv.name}</span>
-                              <span className="text-xs text-slate-300 font-normal">({rv.relation})</span>
+                              <span>{displayName}</span>
+                              <span className="text-xs text-slate-300 font-normal">({displayRelation})</span>
                               {targetChar && <ChevronRight size={14} className="text-red-400" />}
                             </button>
                           );

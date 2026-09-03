@@ -457,20 +457,32 @@ export const PolicyModal: React.FC<PolicyModalProps> = ({
                 <div className="space-y-4">
                   <div>
                     <h5 className="font-bold text-slate-100 mb-1">
-                      {isEn ? '1. Primary Classical Texts (기본 신화 문헌)' : '1. 기본 신화 문헌 (Primary Classical Texts)'}
+                      {isEn ? '1. Primary Classical Texts' : '1. 기본 신화 문헌 (Primary Classical Texts)'}
                     </h5>
                     <ul className="text-xs sm:text-sm list-disc list-inside space-y-1 text-slate-300">
-                      <li><strong>Hesiod (헤시오도스):</strong> <em>Theogony (신통기)</em>, <em>Works and Days (일과 날)</em></li>
-                      <li><strong>Homer (호메로스):</strong> <em>Iliad (일리아스)</em>, <em>Odyssey (오디세이아)</em></li>
-                      <li><strong>Ovid (오비디우스):</strong> <em>Metamorphoses (변신 이야기)</em></li>
-                      <li><strong>Apollodorus (아폴로도로스):</strong> <em>Bibliotheca (신화집)</em></li>
-                      <li><strong>Virgil (베르길리우스):</strong> <em>Aeneid (아이네이스)</em></li>
+                      {isEn ? (
+                        <>
+                          <li><strong>Hesiod:</strong> <em>Theogony</em>, <em>Works and Days</em></li>
+                          <li><strong>Homer:</strong> <em>Iliad</em>, <em>Odyssey</em></li>
+                          <li><strong>Ovid:</strong> <em>Metamorphoses</em></li>
+                          <li><strong>Apollodorus:</strong> <em>Bibliotheca (Library of Greek Mythology)</em></li>
+                          <li><strong>Virgil:</strong> <em>Aeneid</em></li>
+                        </>
+                      ) : (
+                        <>
+                          <li><strong>Hesiod (헤시오도스):</strong> <em>Theogony (신통기)</em>, <em>Works and Days (일과 날)</em></li>
+                          <li><strong>Homer (호메로스):</strong> <em>Iliad (일리아스)</em>, <em>Odyssey (오디세이아)</em></li>
+                          <li><strong>Ovid (오비디우스):</strong> <em>Metamorphoses (변신 이야기)</em></li>
+                          <li><strong>Apollodorus (아폴로도로스):</strong> <em>Bibliotheca (신화집)</em></li>
+                          <li><strong>Virgil (베르길리우스):</strong> <em>Aeneid (아이네이스)</em></li>
+                        </>
+                      )}
                     </ul>
                   </div>
 
                   <div>
                     <h5 className="font-bold text-slate-100 mb-1">
-                      {isEn ? '2. Classical Fine Art & Sculptures' : '2. 고전 명화 및 조각품 (Public Domain)'}
+                      {isEn ? '2. Classical Fine Art & Sculptures (Public Domain)' : '2. 고전 명화 및 조각품 (Public Domain)'}
                     </h5>
                     <p className="text-xs sm:text-sm">
                       {isEn
@@ -484,11 +496,23 @@ export const PolicyModal: React.FC<PolicyModalProps> = ({
                       {isEn ? '3. Museum Attributions' : '3. 주요 소장 미술관 안내'}
                     </h5>
                     <p className="text-xs text-slate-400">
-                      • Musée du Louvre, Paris (프랑스 루브르 박물관)<br />
-                      • Museo del Prado, Madrid (스페인 프라도 미술관)<br />
-                      • The Metropolitan Museum of Art, New York (미국 메트로폴리탄 미술관)<br />
-                      • Galleria degli Uffizi, Florence (이탈리아 우피치 미술관)<br />
-                      • Galleria Borghese, Rome (이탈리아 보르게세 미술관)
+                      {isEn ? (
+                        <>
+                          • Musée du Louvre, Paris<br />
+                          • Museo del Prado, Madrid<br />
+                          • The Metropolitan Museum of Art, New York<br />
+                          • Galleria degli Uffizi, Florence<br />
+                          • Galleria Borghese, Rome
+                        </>
+                      ) : (
+                        <>
+                          • Musée du Louvre, Paris (프랑스 루브르 박물관)<br />
+                          • Museo del Prado, Madrid (스페인 프라도 미술관)<br />
+                          • The Metropolitan Museum of Art, New York (미국 메트로폴리탄 미술관)<br />
+                          • Galleria degli Uffizi, Florence (이탈리아 우피치 미술관)<br />
+                          • Galleria Borghese, Rome (이탈리아 보르게세 미술관)
+                        </>
+                      )}
                     </p>
                   </div>
                 </div>
@@ -527,10 +551,10 @@ export const PolicyModal: React.FC<PolicyModalProps> = ({
                     {submittedData && (
                       <div className="text-left rounded-lg bg-slate-950/80 border border-slate-800 p-3.5 max-w-lg mx-auto text-xs space-y-1.5 font-mono">
                         <div className="text-amber-300">
-                          <span className="text-slate-400">받는사람:</span> twyj21123@gmail.com
+                          <span className="text-slate-400">{isEn ? 'To:' : '받는사람:'}</span> twyj21123@gmail.com
                         </div>
                         <div className="text-slate-200">
-                          <span className="text-slate-400">제목:</span> [신화 대도감 문의] {submittedData.subject}
+                          <span className="text-slate-400">{isEn ? 'Subject:' : '제목:'}</span> {isEn ? '[Mythology Inquiry] ' : '[신화 대도감 문의] '}{submittedData.subject}
                         </div>
                         <div className="text-slate-300 line-clamp-3 pt-1 border-t border-slate-800 text-[11px]">
                           {submittedData.message}

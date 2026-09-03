@@ -189,9 +189,19 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
                   {isEn ? item.nameEn : item.nameKo}
                 </h2>
                 <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-300 font-medium mt-0.5 drop-shadow">
-                  <span>{isEn ? item.nameKo : item.nameEn}</span>
-                  <span className="text-slate-500">|</span>
+                  {!isEn && (
+                    <>
+                      <span>{item.nameEn}</span>
+                      <span className="text-slate-500">|</span>
+                    </>
+                  )}
                   <span className="font-serif italic text-amber-300">{item.nameGreek}</span>
+                  {isEn && (
+                    <>
+                      <span className="text-slate-500">|</span>
+                      <span className="text-slate-400">{item.subType}</span>
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -565,7 +575,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
             <div className="w-full flex items-center justify-between p-3 sm:p-4 bg-slate-950/80 rounded-2xl border border-amber-500/30 mb-3 backdrop-blur-md">
               <div className="flex items-center gap-3">
                 <span className="text-sm sm:text-base font-extrabold text-amber-300 font-serif">
-                  {isEn ? item.nameEn : item.nameKo} ({isEn ? item.nameKo : item.nameEn})
+                  {isEn ? item.nameEn : `${item.nameKo} (${item.nameEn})`}
                 </span>
                 <span className="text-xs text-slate-400 hidden sm:inline-block">
                   {isEn ? 'Sacred Relic High-Res Illustration' : '신화 성물 고화질 일러스트'}

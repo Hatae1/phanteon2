@@ -43,11 +43,11 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 
   const ROLES: { id: CharacterRole | 'all'; label: string }[] = [
     { id: 'all', label: t.roleAll },
-    { id: 'warrior', label: language === 'en' ? 'Warrior' : '전사 (Warrior)' },
-    { id: 'archer', label: language === 'en' ? 'Archer' : '원거리 (Archer)' },
-    { id: 'guardian', label: language === 'en' ? 'Guardian' : '수호자 (Guardian)' },
-    { id: 'mage', label: language === 'en' ? 'Mage' : '권능/마법 (Mage)' },
-    { id: 'support', label: language === 'en' ? 'Support' : '보조/생명 (Support)' },
+    { id: 'warrior', label: t.roleWarrior },
+    { id: 'archer', label: t.roleArcher },
+    { id: 'guardian', label: t.roleGuardian },
+    { id: 'mage', label: t.roleMage },
+    { id: 'support', label: t.roleSupport },
   ];
 
   return (
