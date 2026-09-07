@@ -238,7 +238,7 @@ export const translations: Record<Language, TranslationDictionary> = {
     tabCharacters: '신화 인물 도감',
     tabItems: '신화 아이템 도감',
 
-    searchCharPlaceholder: '신/영웅 이름, 로마명, 권능, 상징물 검색...',
+    searchCharPlaceholder: '신/영웅 이름, 오디세이, 트로이 목마, 권능 검색...',
     catAll: '전체 도감',
     catOlympian: '올림포스 12신',
     catUnderworld: '명계의 신',
@@ -266,7 +266,7 @@ export const translations: Record<Language, TranslationDictionary> = {
     sortName: '이름 가나다순',
     totalCharactersCount: (count: number) => `총 ${count}위`,
 
-    searchItemPlaceholder: '아이템명, 소유자(제우스, 헤르메스 등), 제작자 검색...',
+    searchItemPlaceholder: '성물명, 오디세이, 트로이 목마, 소유자 검색...',
     itemCatAll: '전체 성물',
     itemCatWeapon: '신화 무기',
     itemCatFootwear: '신화 신발',
@@ -434,7 +434,7 @@ export const translations: Record<Language, TranslationDictionary> = {
     tabCharacters: 'Mythological Characters',
     tabItems: 'Divine Relics & Items',
 
-    searchCharPlaceholder: 'Search deities, heroes, Roman names, domains, symbols...',
+    searchCharPlaceholder: 'Search deities, heroes, Odyssey, Trojan Horse, symbols...',
     catAll: 'All Characters',
     catOlympian: 'Olympian 12 Gods',
     catUnderworld: 'Underworld Gods',
@@ -462,7 +462,7 @@ export const translations: Record<Language, TranslationDictionary> = {
     sortName: 'Name (A-Z)',
     totalCharactersCount: (count: number) => `Showing ${count} deities & heroes`,
 
-    searchItemPlaceholder: 'Search relics, owners (Zeus, Hermes, etc.), smiths...',
+    searchItemPlaceholder: 'Search relics, Odyssey, Trojan Horse, owners, smiths...',
     itemCatAll: 'All Relics',
     itemCatWeapon: 'Mythic Weapons',
     itemCatFootwear: 'Mythic Footwear',

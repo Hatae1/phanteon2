@@ -86,25 +86,54 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 
       {/* Bottom Row: Search, Role Filter, Sort By */}
       <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
-        {/* Search Input */}
-        <div className="relative w-full lg:w-72 shrink-0">
-          <Search size={17} className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-400/70" />
-          <input
-            id="pantheon-search-input"
-            type="text"
-            value={searchQuery}
-            onChange={e => onSearchChange(e.target.value)}
-            placeholder={t.searchCharPlaceholder}
-            className="w-full rounded-lg border border-amber-500/30 bg-slate-900/90 py-2 pl-9 pr-8 text-xs md:text-sm text-slate-100 placeholder-slate-400 focus:border-amber-400 focus:outline-none focus:ring-1 focus:ring-amber-400/50"
-          />
-          {searchQuery && (
-            <button
-              onClick={() => onSearchChange('')}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white cursor-pointer"
-            >
-              <X size={15} />
-            </button>
-          )}
+        {/* Search Input & Quick Tags */}
+        <div className="w-full lg:w-auto flex-1 flex flex-col gap-1.5">
+          <div className="relative w-full lg:max-w-md shrink-0">
+            <Search size={17} className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-400/70" />
+            <input
+              id="pantheon-search-input"
+              type="text"
+              value={searchQuery}
+              onChange={e => onSearchChange(e.target.value)}
+              placeholder={t.searchCharPlaceholder}
+              className="w-full rounded-lg border border-amber-500/30 bg-slate-900/90 py-2 pl-9 pr-8 text-xs md:text-sm text-slate-100 placeholder-slate-400 focus:border-amber-400 focus:outline-none focus:ring-1 focus:ring-amber-400/50"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => onSearchChange('')}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white cursor-pointer"
+              >
+                <X size={15} />
+              </button>
+            )}
+          </div>
+
+          {/* Trending / Quick Search Tags */}
+          <div className="flex items-center gap-1.5 text-[11px] text-slate-400 overflow-x-auto pb-0.5 scrollbar-none">
+            <span className="shrink-0 text-amber-400/90 font-semibold">{language === 'en' ? 'Trending:' : '인기 검색:'}</span>
+            {[
+              { label: language === 'en' ? '🏹 Odyssey' : '🏹 영화 오디세이', query: language === 'en' ? 'Odyssey' : '오디세이' },
+              { label: language === 'en' ? '🐴 Trojan Horse' : '🐴 트로이 목마', query: language === 'en' ? 'Trojan Horse' : '트로이 목마' },
+              { label: language === 'en' ? '⚡ Zeus' : '⚡ 제우스', query: language === 'en' ? 'Zeus' : '제우스' },
+              { label: language === 'en' ? '🦉 Athena' : '🦉 아테나', query: language === 'en' ? 'Athena' : '아테나' },
+            ].map(tag => (
+              <button
+                key={tag.query}
+                type="button"
+                onClick={() => {
+                  soundFx.playClick();
+                  onSearchChange(searchQuery === tag.query ? '' : tag.query);
+                }}
+                className={`px-2 py-0.5 rounded-full border transition-all cursor-pointer whitespace-nowrap shrink-0 ${
+                  searchQuery.toLowerCase() === tag.query.toLowerCase()
+                    ? 'bg-amber-500/20 border-amber-400 text-amber-200 font-semibold'
+                    : 'bg-slate-900/80 border-slate-700/80 text-slate-300 hover:border-amber-500/50 hover:text-amber-200'
+                }`}
+              >
+                {tag.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Controls: Role filter pills & Sort dropdown */}

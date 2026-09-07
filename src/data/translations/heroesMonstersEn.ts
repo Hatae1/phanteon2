@@ -206,22 +206,22 @@ export const heroesMonstersEn: Record<string, CharacterLocalization> = {
   },
 
   odysseus: {
-    title: 'Master of Cunning · King of Ithaca & Architect of the Trojan Horse',
-    domain: 'Cunning, Strategy, Eloquence, Perseverance, Navigation, Odyssey',
-    domainDetail: 'King of Ithaca; legendary strategist beloved by Athena who devised the Trojan Horse and survived ten years of wandering at sea',
+    title: 'Protagonist of The Odyssey · Architect of the Trojan Horse & King of Ithaca',
+    domain: 'Cunning, Strategy, Eloquence, Perseverance, Navigation, The Odyssey',
+    domainDetail: 'King of Ithaca; protagonist of Homer’s epic The Odyssey and major cinematic adaptations; legendary strategist beloved by Athena',
     quote: 'My greatest weapon is neither spear nor bow, but the relentless mind that outlasts every storm.',
     symbols: ['Trojan Wooden Horse', 'Great Bow of Odysseus', 'Sailor’s Oar', 'Pilos (Traveler’s Cap)'],
     animals: ['Faithful Hound Argos', 'Boar'],
     plants: ['Olive Tree (Bedpost of Ithaca)', 'Moly (Herb of Hermes)'],
     lore: {
-      summary: 'Odysseus is the quintessential hero of human intellect and endurance. Surviving sirens, cyclopes, sorceresses, and shipwrecks through sheer wit and tactical resourcefulness, he returned to reclaim his throne and faithful queen Penelope.',
+      summary: 'Odysseus is the quintessential hero of human intellect, endurance, and the source of modern epic films like "The Odyssey". Surviving sirens, cyclopes, sorceresses, and shipwrecks through sheer wit and tactical resourcefulness, he returned to reclaim his throne and faithful queen Penelope.',
       birthAndOrigin: 'Son of King Laertes and Anticlea of Ithaca. He married Penelope, daughter of Icarius, and carved their matrimonial bed directly from the living trunk of a deep-rooted olive tree.',
       majorStories: [
         {
           title: 'The Stratagem of the Trojan Horse',
           period: 'Trojan War',
           content: 'After ten agonizing years of stalemate, Odysseus conceived the decisive gambit: constructing a colossal wooden horse concealing elite Achaean warriors inside, while the fleet feigned retreat. Brought into Troy as an offering to Athena, the warriors emerged by night to open the gates.',
-          highlight: 'The most famous military deception in world literary history'
+          highlight: 'The most famous military deception in world literary and cinematic history'
         },
         {
           title: 'Blinding the Cyclops Polyphemus',
@@ -236,8 +236,8 @@ export const heroesMonstersEn: Record<string, CharacterLocalization> = {
           highlight: 'The triumphant restoration of justice, household fidelity, and rightful kingship'
         }
       ],
-      romanDifferences: 'In Roman literature, Ulysses was viewed critically by Virgil as a deceitful, ruthless trickster who destroyed Troy through dishonorable deceit.',
-      etymologyAndLegacy: 'The word "odyssey" has become the universal synonym for a long, transformative spiritual or physical quest.',
+      romanDifferences: 'In Roman literature, Ulysses was viewed critically by Virgil as a deceitful, ruthless trickster who destroyed Troy through dishonorable deceit, yet celebrated by Horace and Dante as an eternal seeker of knowledge.',
+      etymologyAndLegacy: 'The word "odyssey" has become the universal synonym for a transformative quest, inspiring epic cinema like "The Odyssey", James Joyce’s "Ulysses", and Stanley Kubrick’s "2001: A Space Odyssey".',
       famousArtwork: [
         {
           title: 'Ulysses Deriding Polyphemus',

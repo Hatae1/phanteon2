@@ -1699,15 +1699,16 @@ export function filterItems(
   category: ItemCategory,
   searchQuery: string
 ): MythologicalItem[] {
-  return items.filter(item => {
+  const q = searchQuery.toLowerCase().trim();
+
+  const filtered = items.filter(item => {
     // Category filter
     if (category !== 'all' && item.category !== category) {
       return false;
     }
 
     // Search query filter
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase().trim();
+    if (q) {
       const matchName = item.nameKo.toLowerCase().includes(q);
       const matchEn = item.nameEn.toLowerCase().includes(q);
       const matchGreek = item.nameGreek.toLowerCase().includes(q);
@@ -1716,6 +1717,35 @@ export function filterItems(
       const matchSummary = item.summary.toLowerCase().includes(q);
       const matchSubType = item.subType.toLowerCase().includes(q);
 
+      // Deep Lore, Abilities & Stories Match
+      const matchOriginAndLore = item.originAndLore.toLowerCase().includes(q);
+      const matchAbilities = item.abilities?.some(
+        a => a.name.toLowerCase().includes(q) || a.description.toLowerCase().includes(q)
+      );
+      const matchStories = item.majorStories?.some(s => s.toLowerCase().includes(q));
+      const matchModernLegacy = item.modernLegacy?.toLowerCase().includes(q);
+
+      // Semantic Synonyms for Popular Movie / Literature Queries (Odyssey / The Odyssey / 오디세이 / 트로이목마)
+      const isOdysseyQuery =
+        q.includes('오디세이') ||
+        q.includes('odyssey') ||
+        q.includes('오디세우스') ||
+        q.includes('율리시스') ||
+        q.includes('ulysses') ||
+        q.includes('이타카') ||
+        q.includes('ithaca') ||
+        q.includes('트로이목마') ||
+        q.includes('trojan horse');
+
+      const matchOdysseyRelic =
+        isOdysseyQuery &&
+        (item.id === 'odysseus-bow' ||
+          item.id === 'aeolus-bag' ||
+          item.id === 'circe-potion-moly' ||
+          item.id === 'palladium-troy' ||
+          item.owner.includes('오디세우스') ||
+          item.owner.toLowerCase().includes('odysseus'));
+
       if (
         !matchName &&
         !matchEn &&
@@ -1723,7 +1753,12 @@ export function filterItems(
         !matchOwner &&
         !matchCreator &&
         !matchSummary &&
-        !matchSubType
+        !matchSubType &&
+        !matchOriginAndLore &&
+        !matchAbilities &&
+        !matchStories &&
+        !matchModernLegacy &&
+        !matchOdysseyRelic
       ) {
         return false;
       }
@@ -1731,4 +1766,27 @@ export function filterItems(
 
     return true;
   });
+
+  // If searching for Odyssey, prioritize Odysseus's Bow, Bag of Winds, Circe's Moly, and Trojan Palladium
+  if (
+    q &&
+    (q.includes('오디세이') ||
+      q.includes('odyssey') ||
+      q.includes('오디세우스') ||
+      q.includes('율리시스') ||
+      q.includes('트로이') ||
+      q.includes('trojan'))
+  ) {
+    return [...filtered].sort((a, b) => {
+      const isOdysseyA =
+        a.id === 'odysseus-bow' || a.id === 'aeolus-bag' || a.id === 'circe-potion-moly' || a.id === 'palladium-troy';
+      const isOdysseyB =
+        b.id === 'odysseus-bow' || b.id === 'aeolus-bag' || b.id === 'circe-potion-moly' || b.id === 'palladium-troy';
+      if (isOdysseyA && !isOdysseyB) return -1;
+      if (!isOdysseyA && isOdysseyB) return 1;
+      return 0;
+    });
+  }
+
+  return filtered;
 }

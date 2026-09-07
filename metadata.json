@@ -1,6 +1,6 @@
 {
   "name": "그리스 로마 신화 판테온 & 성물 도감",
-  "description": "그리스 로마 신화의 주신·영웅·괴물 캐릭터 도감 및 전설 속 무기·신발·장신구·갑옷·성물 대백과 도감",
+  "description": "영화 오디세이(The Odyssey) 원작 영웅 오디세우스와 트로이 목마, 올림포스 12주신, 전설 속 신성 무기·성물 대백과 도감",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
