@@ -12,6 +12,7 @@ import { ItemDetailModal } from './components/ItemDetailModal';
 import { MythologyGuideSection } from './components/MythologyGuideSection';
 import { Footer } from './components/Footer';
 import { PolicyModal, PolicyTab } from './components/PolicyModal';
+import { CrawlerContent } from './components/CrawlerContent';
 import { allCharacters, filterCharacters } from './data/characters';
 import { allMythologicalItems, filterItems } from './data/mythologicalItems';
 import { AppModalEntry } from './types/modal';
@@ -124,16 +125,20 @@ export default function App() {
     }
   };
 
-  // Modal Opener Functions with Browser History Push
+  // Modal Opener Functions with Browser History Push & Clean URL Deep Linking
   const openCharacter = (character: MythologicalCharacter) => {
     soundFx.playClick();
-    window.history.pushState({ modal: 'character', id: character.id }, '');
+    const url = new URL(window.location.href);
+    url.searchParams.set('character', character.id);
+    window.history.pushState({ modal: 'character', id: character.id }, '', url.toString());
     setModalStack(prev => [...prev, { type: 'character', character }]);
   };
 
   const openItem = (item: MythologicalItem) => {
     soundFx.playClick();
-    window.history.pushState({ modal: 'item', id: item.id }, '');
+    const url = new URL(window.location.href);
+    url.searchParams.set('item', item.id);
+    window.history.pushState({ modal: 'item', id: item.id }, '', url.toString());
     setModalStack(prev => [...prev, { type: 'item', item }]);
   };
 
@@ -145,29 +150,37 @@ export default function App() {
 
   const openCompare = (fighterA?: MythologicalCharacter, fighterB?: MythologicalCharacter) => {
     soundFx.playClick();
-    window.history.pushState({ modal: 'compare' }, '');
+    const url = new URL(window.location.href);
+    url.searchParams.set('action', 'compare');
+    window.history.pushState({ modal: 'compare' }, '', url.toString());
     setModalStack(prev => [...prev, { type: 'compare', fighterA, fighterB }]);
   };
 
   const openFamilyTree = () => {
     soundFx.playClick();
-    window.history.pushState({ modal: 'familyTree' }, '');
+    const url = new URL(window.location.href);
+    url.searchParams.set('action', 'familytree');
+    window.history.pushState({ modal: 'familyTree' }, '', url.toString());
     setModalStack(prev => [...prev, { type: 'familyTree' }]);
   };
 
   const openQuiz = () => {
     soundFx.playClick();
-    window.history.pushState({ modal: 'quiz' }, '');
+    const url = new URL(window.location.href);
+    url.searchParams.set('action', 'quiz');
+    window.history.pushState({ modal: 'quiz' }, '', url.toString());
     setModalStack(prev => [...prev, { type: 'quiz' }]);
   };
 
   const openPolicy = (tab: PolicyTab) => {
     soundFx.playClick();
-    window.history.pushState({ modal: 'policy', tab }, '');
+    const url = new URL(window.location.href);
+    url.searchParams.set('policy', tab);
+    window.history.pushState({ modal: 'policy', tab }, '', url.toString());
     setModalStack(prev => [...prev, { type: 'policy', tab }]);
   };
 
-  // Close the active top-most modal
+  // Close the active top-most modal and clean URL
   const closeTopModal = (isFromBrowserBack = false) => {
     if (modalStackRef.current.length === 0) return;
 
@@ -175,7 +188,23 @@ export default function App() {
       ignorePopstateRef.current += 1;
       window.history.back();
     }
-    setModalStack(prev => prev.slice(0, -1));
+    setModalStack(prev => {
+      const next = prev.slice(0, -1);
+      // Clean query parameters from URL if all modals are closed
+      if (next.length === 0) {
+        try {
+          const url = new URL(window.location.href);
+          url.searchParams.delete('character');
+          url.searchParams.delete('item');
+          url.searchParams.delete('action');
+          url.searchParams.delete('policy');
+          window.history.replaceState({}, '', url.pathname + (url.search ? url.search : ''));
+        } catch {
+          // ignore
+        }
+      }
+      return next;
+    });
   };
 
   // Browser Back Button & Escape Key Handling
@@ -201,7 +230,7 @@ export default function App() {
     window.addEventListener('popstate', handlePopstate);
     window.addEventListener('keydown', handleKeyDown);
 
-    // Support PWA app shortcuts & direct URL query routes on startup
+    // Support AdSense crawler deep-linking, PWA shortcuts & direct URL query routes on startup
     try {
       const searchParams = new URLSearchParams(window.location.search);
       const tabParam = searchParams.get('tab');
@@ -214,6 +243,30 @@ export default function App() {
       const catParam = searchParams.get('category');
       if (catParam) {
         setCategory(catParam as CharacterCategory);
+      }
+
+      // Direct Character Deep Linking for SEO / AdSense
+      const charParam = searchParams.get('character') || searchParams.get('id');
+      if (charParam) {
+        const foundChar = allCharacters.find(c => c.id === charParam);
+        if (foundChar) {
+          setModalStack(prev => [...prev, { type: 'character', character: foundChar }]);
+        }
+      }
+
+      // Direct Item Deep Linking for SEO / AdSense
+      const itemParam = searchParams.get('item');
+      if (itemParam) {
+        const foundItem = allMythologicalItems.find(i => i.id === itemParam);
+        if (foundItem) {
+          setModalStack(prev => [...prev, { type: 'item', item: foundItem }]);
+        }
+      }
+
+      // Direct Policy Page Deep Linking
+      const policyParam = searchParams.get('policy') as PolicyTab | null;
+      if (policyParam && ['privacy', 'terms', 'about', 'contact', 'copyright'].includes(policyParam)) {
+        setModalStack(prev => [...prev, { type: 'policy', tab: policyParam }]);
       }
 
       const actionParam = searchParams.get('action');
@@ -479,6 +532,13 @@ export default function App() {
 
           {/* Academic Mythology Guide Section (Crawler & AdSense Content Rich Section) */}
           <MythologyGuideSection />
+
+          {/* Full Scholarly Directory & Preloaded Index for Search Engine Bots & AdSense Crawlers */}
+          <CrawlerContent
+            onSelectCharacter={handleSelectCharacterById}
+            onSelectItem={handleOpenItemById}
+            onOpenPolicy={openPolicy}
+          />
         </main>
 
         {/* AdSense Compliant Multi-Column Footer */}

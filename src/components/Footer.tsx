@@ -133,49 +133,69 @@ export const Footer: React.FC<FooterProps> = ({
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
-                <button
-                  onClick={() => handleOpenPolicyTab('privacy')}
+                <a
+                  href="/?policy=privacy"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleOpenPolicyTab('privacy');
+                  }}
                   className="hover:text-amber-300 transition text-left cursor-pointer flex items-center gap-1.5 text-amber-200/90 font-medium"
                 >
                   <span className="text-amber-400">›</span>
                   <span>{isEn ? 'Privacy Policy (개인정보처리방침)' : '개인정보처리방침 (Privacy Policy)'}</span>
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={() => handleOpenPolicyTab('terms')}
+                <a
+                  href="/?policy=terms"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleOpenPolicyTab('terms');
+                  }}
                   className="hover:text-amber-300 transition text-left cursor-pointer flex items-center gap-1.5"
                 >
                   <span className="text-amber-500">›</span>
                   <span>{isEn ? 'Terms of Service (이용약관)' : '이용약관 (Terms of Service)'}</span>
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={() => handleOpenPolicyTab('about')}
+                <a
+                  href="/?policy=about"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleOpenPolicyTab('about');
+                  }}
                   className="hover:text-amber-300 transition text-left cursor-pointer flex items-center gap-1.5"
                 >
                   <span className="text-amber-500">›</span>
                   <span>{isEn ? 'About Us (사이트 소개)' : '사이트 소개 (About Us)'}</span>
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={() => handleOpenPolicyTab('copyright')}
+                <a
+                  href="/?policy=copyright"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleOpenPolicyTab('copyright');
+                  }}
                   className="hover:text-amber-300 transition text-left cursor-pointer flex items-center gap-1.5"
                 >
                   <span className="text-amber-500">›</span>
                   <span>{isEn ? 'Copyright & Source Credits' : '저작권 및 명화 출처 안내'}</span>
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={() => handleOpenPolicyTab('contact')}
+                <a
+                  href="/?policy=contact"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleOpenPolicyTab('contact');
+                  }}
                   className="hover:text-amber-300 transition text-left cursor-pointer flex items-center gap-1.5"
                 >
                   <span className="text-amber-500">›</span>
                   <span>{isEn ? 'Contact Us (문의하기)' : '문의하기 및 피드백 (Contact)'}</span>
-                </button>
+                </a>
               </li>
             </ul>
           </div>
@@ -222,26 +242,38 @@ export const Footer: React.FC<FooterProps> = ({
           </div>
 
           <div className="flex items-center gap-4">
-            <button
-              onClick={() => handleOpenPolicyTab('privacy')}
+            <a
+              href="/?policy=privacy"
+              onClick={(e) => {
+                e.preventDefault();
+                handleOpenPolicyTab('privacy');
+              }}
               className="hover:text-slate-300 cursor-pointer underline"
             >
               {isEn ? 'Privacy' : '개인정보처리'}
-            </button>
+            </a>
             <span>•</span>
-            <button
-              onClick={() => handleOpenPolicyTab('terms')}
+            <a
+              href="/?policy=terms"
+              onClick={(e) => {
+                e.preventDefault();
+                handleOpenPolicyTab('terms');
+              }}
               className="hover:text-slate-300 cursor-pointer underline"
             >
               {isEn ? 'Terms' : '이용약관'}
-            </button>
+            </a>
             <span>•</span>
-            <button
-              onClick={() => handleOpenPolicyTab('contact')}
+            <a
+              href="/?policy=contact"
+              onClick={(e) => {
+                e.preventDefault();
+                handleOpenPolicyTab('contact');
+              }}
               className="hover:text-slate-300 cursor-pointer underline"
             >
               {isEn ? 'Contact' : '문의'}
-            </button>
+            </a>
           </div>
         </div>
 

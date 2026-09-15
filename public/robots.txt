@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+Allow: /sitemap.xml
+
+# Search engines and Google AdSense / Google-Display-Ads crawler
+User-agent: Mediapartners-Google
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+Sitemap: https://ais-pre-755zyatmy2arc75dmjhx63-382508637325.asia-northeast1.run.app/sitemap.xml

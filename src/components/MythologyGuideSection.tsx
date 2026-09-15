@@ -277,6 +277,75 @@ export const MythologyGuideSection: React.FC = () => {
         </div>
       ),
     },
+    {
+      id: 'odyssey-trojan-war',
+      title: isEn
+        ? 'The Odyssey & Trojan Horse: Human Wit vs. Superhuman Fate'
+        : '오디세이아와 트로이 목마: 신들의 분노에 맞선 인간 지성과 생존의 서사',
+      subtitle: isEn
+        ? 'Homeric heroic ideals, Nostos (Homecoming), and intellectual triumph over brute force'
+        : '호메로스 영웅관의 대전환, 노스토스(귀환) 서사와 영화 《오디세이》의 고전적 뿌리',
+      icon: Feather,
+      content: isEn ? (
+        <div className="space-y-3.5 text-slate-300 text-xs sm:text-sm leading-relaxed">
+          <p>
+            Homer’s <em>The Odyssey</em> stands alongside the <em>Iliad</em> as the cornerstone of Western narrative literature and the primary inspiration for classical epic cinema. While the <em>Iliad</em> centers on Achilles’s tragic rage (<em>Menis</em>) and battlefield glory (<em>Kleos</em>), <em>The Odyssey</em> pivots to an entirely different heroic virtue: <strong>Metis (pragmatic intellect, cunning wisdom, and adaptive endurance)</strong>.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 my-3">
+            <div className="rounded-xl bg-slate-950/70 p-3.5 border border-slate-800">
+              <h5 className="font-bold text-amber-300 text-xs mb-1">1. The Trojan Horse Deception</h5>
+              <p className="text-[12px] text-slate-400">
+                After ten years of bloody siege that claimed countless champions, Troy was conquered not by celestial thunderbolts, but by an engineered wooden structure concealing elite warriors—an enduring symbol of tactical intellect over brute force.
+              </p>
+            </div>
+            <div className="rounded-xl bg-slate-950/70 p-3.5 border border-slate-800">
+              <h5 className="font-bold text-amber-300 text-xs mb-1">2. "Nobody (Outis)" in Polyphemus’s Cave</h5>
+              <p className="text-[12px] text-slate-400">
+                Trapped by the monstrous son of Poseidon, Odysseus introduced himself as "Nobody." When blinded, the Cyclops cried to his kin that "Nobody is killing me," demonstrating the supreme potency of linguistic misdirection in the face of titanic terror.
+              </p>
+            </div>
+            <div className="rounded-xl bg-slate-950/70 p-3.5 border border-slate-800">
+              <h5 className="font-bold text-amber-300 text-xs mb-1">3. The Nostos & Ithaca Reclaimed</h5>
+              <p className="text-[12px] text-slate-400">
+                The term <em>Nostos</em> (sacred homecoming)—from which the modern psychological term <em>Nostalgia</em> is derived—reaches its peak as Odysseus stringing his unbendable composite bow to cleanse his royal hearth of insolent suitors.
+              </p>
+            </div>
+          </div>
+          <p>
+            Throughout his perilous voyage, Odysseus endures the seductive oblivion of the Lotus-Eaters, Circe’s transformative witchcraft, the fatal harmony of the Sirens, and the wrath of sea-god Poseidon. Guided by Athena, goddess of wisdom, Odysseus proves that human resilience, intellectual discernment, and marital fidelity can withstand even the most merciless divine retributions.
+          </p>
+        </div>
+      ) : (
+        <div className="space-y-3.5 text-slate-300 text-xs sm:text-sm leading-relaxed">
+          <p>
+            호메로스의 《오디세이아(The Odyssey)》는 《일리아스》와 함께 서양 고전문학의 두 기둥이자, 오늘날 수많은 영화와 문학의 원형이 된 불멸의 영웅 서사시입니다. 《일리아스》가 아킬레우스의 비극적 분노(메니스)와 전장에서의 무력적 영광(클레오스)을 노래했다면, 《오디세이아》는 전혀 새로운 차원의 영웅적 덕목인 <strong>‘메티스(Metis, 지략과 실용적 지혜, 꺾이지 않는 적응력)’</strong>를 조명합니다.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 my-3">
+            <div className="rounded-xl bg-slate-950/70 p-3.5 border border-slate-800">
+              <h5 className="font-bold text-amber-300 text-xs mb-1">1. 트로이 목마의 승리</h5>
+              <p className="text-[12px] text-slate-400">
+                수많은 영웅의 목숨을 앗아가며 10년간 난공불락이던 트로이를 함락시킨 것은 신들의 벼락도 막강한 무력도 아닌, 오디세우스가 고안해 낸 정교한 목마와 심리적 기만술이었습니다.
+              </p>
+            </div>
+            <div className="rounded-xl bg-slate-950/70 p-3.5 border border-slate-800">
+              <h5 className="font-bold text-amber-300 text-xs mb-1">2. 키클롭스 동굴과 ‘아무도 아닌 자(Outis)’</h5>
+              <p className="text-[12px] text-slate-400">
+                바다의 신 포세이돈의 아들인 식인 거인 폴리페모스에게 자신을 ‘아무도 아닌 자’라 속이고, 눈을 찌른 뒤 다른 거인들이 올 때 "아무도 나를 해치지 않는다!"라고 외치게 만들어 탈출한 명장면은 고대 지략의 백미입니다.
+              </p>
+            </div>
+            <div className="rounded-xl bg-slate-950/70 p-3.5 border border-slate-800">
+              <h5 className="font-bold text-amber-300 text-xs mb-1">3. 노스토스(Nostos)와 이타카 귀환</h5>
+              <p className="text-[12px] text-slate-400">
+                현대어 ‘노스탤지어(향수병)’의 어원이 된 영웅의 귀환 서사 ‘노스토스’는 20년 만에 거지 변장을 하고 돌아와 자신의 강궁을 당겨 정숙한 아내 페넬로페를 괴롭히던 구혼자들을 응징하며 대단원의 막을 내립니다.
+              </p>
+            </div>
+          </div>
+          <p>
+            망각을 부르는 로토스 열매의 유혹, 부하들을 돼지로 변하게 만든 마녀 키르케의 마법, 돛대에 몸을 결박하고 극복한 세이렌의 치명적인 노랫소리, 그리고 스킬라와 카리브디스의 협곡까지—오디세우스의 10년 바다 방랑은 신들의 거대한 운명에 맞선 인간 지성과 생존 의지의 영원한 찬가로 남아 있습니다.
+          </p>
+        </div>
+      ),
+    },
   ];
 
   return (
